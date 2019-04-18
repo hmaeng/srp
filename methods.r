@@ -153,6 +153,8 @@ pred.rdg <- function(object, newX){
   return(list("yhat" = yhat))
 }
 
+### downloaded from http://www.lsp.ups-tlse.fr/staph/npfda/mpdp-routinesR.txt
+### and slightly adjusted as the Bwdselection does not work when only one variable is added in Fwdselection
 predict.mpdp <- function(object, CURVPRED)
 {
   if(is.vector(CURVPRED)) CURVPRED <- as.matrix(CURVPRED)
@@ -207,6 +209,8 @@ predict.mpdp <- function(object, CURVPRED)
   return(Predictions)
 }
 
+### downloaded from http://www.lsp.ups-tlse.fr/staph/npfda/npfda-routinesR.txt
+### and slightly adjusted as error occurs when the sample size is smaller than 20
 funopare.knn.gcv <- function(Response, CURVES, PRED, ..., kind.of.kernel = "quadratic", semimetric = "deriv"){
   Response <- as.vector(Response)
   if(is.vector(PRED)) PRED <- as.matrix(t(PRED))
@@ -222,7 +226,7 @@ funopare.knn.gcv <- function(Response, CURVES, PRED, ..., kind.of.kernel = "quad
   step <- ceiling(n1/100)
   if(step == 0)
     step <- 1
-  ### ERR occurs in "Knearest <- seq(from = 10, to = n1 %/% 2, by = step)" when n1/2 is smaller 10
+  ### ERR occurs in "Knearest <- seq(from = 10, to = n1 %/% 2, by = step)" when n1/2 is smaller than 10
   #Knearest <- seq(from = 10, to = n1 %/% 2, by = step)
   Knearest <- seq(from = 1, to = n1 %/% 2, by = step) # adjusted
   kmax <- max(Knearest)
