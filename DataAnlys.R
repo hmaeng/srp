@@ -124,7 +124,7 @@ DATAanlys <- function(dat0, N, L, maxq, prtn, nknot, nbmax, nbbw, pcvpar, s, ini
 #   from Human Fertility Database
 #   (www.humanfertility.org)
 #######################################
-load("fr.Rdata")
+load("fr.Rdata") # available from the github page, originally downloaded from www.humanfertility.org
 ls()
 data.fert <- t(dat[,,dimnames(dat)[[3]]==20])
 result <- DATAanlys(dat0=data.fert, N=100, L=9, maxq=4, prtn=0.83, nknot=5, nbmax=5, nbbw=5, pcvpar=1/4, s=seq(0.00000001,0.00001,length.out=30), inisp=1)
