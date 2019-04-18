@@ -45,20 +45,12 @@ flr <- function(dat, L=35){
   t <- seq(0, 1, length.out=p-1)*(p-1)
 
   B.basis <- create.bspline.basis(rangeval=c(0, p-1), norder=4, nbasis=L)
-  #X.basis <- create.bspline.basis(rangeval=c(0, p-1), norder=4, nbasis=L)
-
-  #X.basis <- as.fd(splinefun(t, X[, 1], method="natural"))$basis
-  #Xcf <- ncs(X)$cf0
-  #cXcf <- Xcf-rowMeans(Xcf)
 
   Xfd = smooth.basis(t, X, B.basis)$fd  ## functional data object for train_X
-  #Xfd2 = smooth.basis(t, test_X, X.basis)$fd  ## functional data object for test_X
   cXfd = center.fd(Xfd)
-  #cXfd2 = center.fd(Xfd2)
 
   J <- inprod(B.basis, B.basis)
   R <- eval.penalty(B.basis, int2Lfd(2))
-  #W <- t(cXcf)%*%J
   W <- t(cXfd$coefs)%*%J
 
   mgfit.flr <- magic(y=c(cY), X=W, sp=1, S=list(R), off=1, gcv=T)
@@ -83,9 +75,6 @@ pred.flr <- function(object, newX){
   W <- t(Xfd$coefs)%*%(object$J)
   yhat <- W%*%object$etahat.flr + object$muhat.flr
 
-  #Xcf <- ncs(newX)$cf0
-  #W2 <- t(Xcf)%*%object$J
-  #yhat <- W2%*%object$etahat.flr + object$muhat.flr
   return(list("yhat" = yhat))
 }
 
