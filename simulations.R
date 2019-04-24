@@ -179,11 +179,13 @@ MSPE
 
 
 ### Figure 2
-maxfac <- 1+(table(sim1$qhat[,5])==table(sim1$qhat[,5]))
+maxfac <- 1+(table(sim1$qhat[,5])==max(table(sim1$qhat[,5])))
 barplot(table(sim1$qhat[,5]), col=c("gray","black")[maxfac], cex.names=2, cex.axis=2)
-maxfac <- 1+(table(sim2$qhat[,5])==table(sim2$qhat[,5]))
+maxfac <- 1+(table(sim2$qhat[,5])==max(table(sim2$qhat[,5])))
 barplot(table(sim2$qhat[,5]), col=c("gray","black")[maxfac], cex.names=2, cex.axis=2)
-maxfac <- 1+(table(sim3$qhat[,5])==table(sim3$qhat[,5]))
+maxfac <- 1+(table(sim3$qhat[,5])==max(table(sim3$qhat[,5])))
 barplot(table(sim3$qhat[,5]), col=c("gray","black")[maxfac], cex.names=2, cex.axis=2)
-maxfac <- 1+(table(sim4$qhat[,5])==table(sim4$qhat[,5]))
+maxfac <- 1+(table(sim4$qhat[,5])==max(table(sim4$qhat[,5])))
 barplot(table(sim4$qhat[,5]), col=c("gray","black")[maxfac], cex.names=2, cex.axis=2)
+
+
