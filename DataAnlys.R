@@ -284,7 +284,7 @@ result <- lapply(result, function(x) {colnames(x) <- c("MLR", "FLR", "FLiRTI", "
 p <- dim(dat)[1]
 n <- dim(dat)[2]
 n1 <- dim(x1)[2]
-n2 <- dim(x1)[2]
+n2 <- dim(x2)[2]
 train_X <- dat[c(1:(p-1)), 1:n1, drop=F]
 test_X <- dat[c(1:(p-1)), (n1+1):n, drop=F]
 train_Y <- dat[p, 1:n1, drop=F]
