@@ -237,6 +237,7 @@ barplot(t(tr), cex.axis=1, cex.names=1, ylim=c(0,60))
 
 
 
+
 #######################################
 #   4) Montly sunspot data
 #   from Base R datasets
@@ -244,6 +245,11 @@ barplot(t(tr), cex.axis=1, cex.names=1, ylim=c(0,60))
 x <- sunspot.month
 x <- sqrt(x)
 x <- scale(x)
+
+par(mfrow=c(1,3), mar=c(4.5,4,2,2))
+plot(x,  type="l", xlab="Year", ylab="")
+pacf(as.vector(x), lag.max=150, xlab="Lag", main="")
+acf(as.vector(x), lag.max=150, xlab="Lag", main="")
 
 p <- 0.7
 n <- length(x)
@@ -287,14 +293,14 @@ test_Y <- dat[p, (n1+1):n, drop=F]
 ##################### MLR ########################
 mlr.obj <- mlr(dat=dat[, 1:n1, drop=F], maxq=15)
 p.mlr <- pred.mlr(mlr.obj, newX=test_X)
-result[[1]][K,1] <- mlr.obj$qhat.mlr
-result[[2]][K,1] <- mean((p.mlr$yhat-c(test_Y))^2, na.rm=T)
+result[[1]][,1] <- mlr.obj$qhat.mlr
+result[[2]][,1] <- mean((p.mlr$yhat-c(test_Y))^2, na.rm=T)
 ##################################################
 ##################### FLR ########################
 flr.obj <- flr(dat=dat[, 1:n1, drop=F], L=35)
 p.flr <- pred.flr(flr.obj, newX=test_X)
-result[[1]][K,2] <- NA
-result[[2]][K,2] <- mean((p.flr$yhat-c(test_Y))^2, na.rm=T)
+result[[1]][,2] <- NA
+result[[2]][,2] <- mean((p.flr$yhat-c(test_Y))^2, na.rm=T)
 ##################################################
 #################### FLiRTI ######################
 ### the result
@@ -310,41 +316,35 @@ min.err <- c(which.min(f.der2$error), which.min(f.der3$error), which.min(f.der4$
 opt.sigma <- s[min.err[opt.d-1]]
 flrti.obj <- flrti(Y=c(train_Y), X=t(train_X), sigma=opt.sigma, deriv=opt.d, weight=0.1, plot=F)
 p.flrti <- predict.flrti(flrti.obj, t(test_X))
-result[[1]][K,3] <- NA
-result[[2]][K,3] <- mean((p.flrti-c(test_Y))^2, na.rm=T)
+result[[1]][,3] <- NA
+result[[2]][,3] <- mean((p.flrti-c(test_Y))^2, na.rm=T)
 ##################################################
 ###################### SRPl ######################
 ### use package "srp"
 srpl.obj <- srp.l(dat[, 1:n1, drop=F], maxq=15, plot=F)
 p.srpl <-  predict(srpl.obj, x=test_X)
-result[[1]][K,4] <- srpl.obj$qhat
-result[[2]][K,4] <- mean((p.srpl$yhat - c(test_Y))^2, na.rm=T)
+result[[1]][,4] <- srpl.obj$qhat
+result[[2]][,4] <- mean((p.srpl$yhat - c(test_Y))^2, na.rm=T)
 ##################################################
 ###################### SRPc ######################
 ### use package "srp"
 srpc.obj <- srp.c(dat[, 1:n1, drop=F], L=35, maxq=15, inisp=1, plot=F)
 p.srpc <-  predict(srpc.obj, x=test_X)
-result[[1]][K,5] <- srpc.obj$qhat
-result[[2]][K,5] <- mean((p.srpc$yhat - c(test_Y))^2, na.rm=T)
+result[[1]][,5] <- srpc.obj$qhat
+result[[2]][,5] <- mean((p.srpc$yhat - c(test_Y))^2, na.rm=T)
 ##################################################
 #################### RDG #########################
 rdg.obj <- rdg(dat=dat[, 1:n1, drop=F])
 p.rdg <- pred.rdg(rdg.obj, newX=test_X)
-result[[1]][K,6] <- NA
-result[[2]][K,6] <- mean((p.rdg$yhat-c(test_Y))^2, na.rm=T)
+result[[1]][,6] <- NA
+result[[2]][,6] <- mean((p.rdg$yhat-c(test_Y))^2, na.rm=T)
 ##################################################
 #################### OLS #########################
 ols.obj <- lm(lag0 ~ .-1, data=lagged.train.x)
 lagged.test.x0 <- lagged.test.x[, -1, drop=F]
 p.ols <- predict(ols.obj, newdata = lagged.test.x0)
-result[[1]][K,7] <- NA
-result[[2]][K,7] <- mean((p.ols-lagged.test.x$lag0)^2, na.rm=T)
+result[[1]][,7] <- NA
+result[[2]][,7] <- mean((p.ols-lagged.test.x$lag0)^2, na.rm=T)
 
-### Figure 13
-par(mfrow=c(1,3), mar=c(4.5,4,2,2))
-plot(dat,  type="l", xlab="Year", ylab="")
-pacf(as.vector(dat), lag.max=150, xlab="Lag", main="")
-acf(as.vector(dat), lag.max=150, xlab="Lag", main="")
-
-### Table 6
+### Table
 round(result$mspe, 4)*100
